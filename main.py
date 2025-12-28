@@ -16,6 +16,14 @@ from src.filter_dashboard_agreggated_data import (
 )
 from src.app_styling import add_custom_css
 
+st.set_page_config(layout="wide")
+
+st.markdown("""
+
+<style> .stApp { background-color: #0e1117 !important; color: #fafafa !important; } [data-testid="stSidebar"] { background-color: #262730 !important; } p, h1, h2, h3, h4, h5, h6, label { color: #fafafa !important; } </style>
+
+""", unsafe_allow_html=True)
+
 URLS = {
     #"dynamic_events": "https://raw.githubusercontent.com/SkillCorner/opendata/master/data/matches/1886347/1886347_dynamic_events.csv",
     #"match_info": "https://raw.githubusercontent.com/SkillCorner/opendata/refs/heads/master/data/matches/1886347/1886347_match.json",
