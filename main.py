@@ -11,13 +11,12 @@ import streamlit as st
 from src.data_loading import load_aggregated_physical_data
 from src.filter_dashboard_agreggated_data import (
     prepare_physical_data_for_display,
-    plot_physical_radar,
-    display_metric_definitions
+    plot_physical_radar
 )
-from src.app_styling import add_custom_css
-
-st.set_page_config(layout="wide")
-
+from src.app_styling import (
+    add_custom_css,
+    title_with_icon
+)
 
 URLS = {
     #"dynamic_events": "https://raw.githubusercontent.com/SkillCorner/opendata/master/data/matches/1886347/1886347_dynamic_events.csv",
@@ -25,41 +24,6 @@ URLS = {
     #"phases_of_play": 'https://raw.githubusercontent.com/SkillCorner/opendata/refs/heads/master/data/matches/1886347/1886347_phases_of_play.csv',
     "physical_data": 'https://raw.githubusercontent.com/SkillCorner/opendata/refs/heads/master/data/aggregates/aus1league_physicalaggregates_20242025_midfielders.csv'
 }
-
-def title_with_icon(icon: str, title: str):
-    """Formats a header with an icon using custom CSS."""
-    st.markdown(
-        f"<div class='title-wrapper'><div class='icon'>{icon}</div><h3>{title}</h3></div>", 
-        unsafe_allow_html=True
-    )
-
-def title_with_icon(icon: str, title: str):
-    """Formats a header with a larger icon and aligned title."""
-    st.markdown(
-        f"""
-        <style>
-            .title-wrapper {{
-                display: flex;
-                align-items: center;
-                gap: 1Opx; /* Space between icon and text */
-                margin-bottom: 10px;
-            }}
-            .icon {{
-                font-size: 1.75rem; /* Adjust this to make the icon bigger */
-                line-height: 1;
-            }}
-            .title-wrapper h3 {{
-                margin: 0; /* Remove default margin for perfect alignment */
-                font-size: 1.75rem;
-            }}
-        </style>
-        <div class='title-wrapper'>
-            <div class='icon'>{icon}</div>
-            <h3>{title}</h3>
-        </div>
-        """, 
-        unsafe_allow_html=True
-    )
 
 @st.cache_data
 def load_all_data():
@@ -125,13 +89,13 @@ with st.expander("ℹ️ Project Overview & Data Philosophy", expanded=False):
     | Metric | What it measures | Scouting Context |
     | :--- | :--- | :--- |
     | **Top Speed** | Peak sprint velocity 99th percentile (PSV99).  | The top speed which the player is able to reach multiple times. |
-    | **Top Accel Time** | Efficiency in reaching high speeds. | "Quickness" and reactivity in tight spaces. |
-    | **High Accel Count** | Number of rapid speed increases (>3 $m/s^2$). | Ability to initiate movements from a standing or jogging start. |
-    | **High Decel Count** | Number of rapid speed decreases (<-3 $m/s^2$). | Ability to stop and change direction efficiently. |
     | **m/min (TIP)** | Distance covered when your team has the ball. | Work rate in possession and attacking support. |
     | **m/min (OTIP)** | Distance covered when the opponent has the ball. | Defensive work rate, tracking back, and pressing. |
     | **HSR (High Speed Running)** | Distance covered between 20 and 25 km/h. | Ability to repeatedly transition across the pitch at high speed. |
-    | **Sprint Distance** | Distance covered above 25 km/h. | Ability to repeatedly transition across the pitch at sprint speed.|  
+    | **Sprint Distance** | Distance covered above 25 km/h. | Ability to repeatedly transition across the pitch at sprint speed.|
+    | **High Accel Count** | Number of rapid speed increases (>3 $m/s^2$). | Ability to initiate movements from a standing or jogging start. |
+    | **Accel Time** | The average of the 3 best Time to HSR performances. | How quick a player can initiate a movement to high speed running. |
+    | **High Decel Count** | Number of rapid speed decreases (<-3 $m/s^2$). | Ability to stop and change direction efficiently. |
     """)
     
     
@@ -222,6 +186,7 @@ physical_data_display, physical_data_percentile, physical_data_radar_source = pr
     position_analysis
 )
 
+
 st.checkbox('Show Percentile Scores', key='percentile_toggle')
 if st.session_state['percentile_toggle']:
     A = physical_data_percentile.reset_index()
@@ -240,13 +205,13 @@ with col1:
     A = A[(A['Matches'] >= matchen[0]) & (A['Matches'] <= matchen[1])]
     A = A.set_index(['Player', 'Team', 'Age', 'Matches'])
 with col3:
-    metrics = st.multiselect('show parameters', ['Top Speed', 'Top Accel Time', 
+    metrics = st.multiselect('show parameters', ['Top Speed', 'Accel Time', 
         'Total m/min TIP', 'HSR m/min TIP', 'Sprint m/min TIP', 
         'High Accel Count TIP', 'High Decel Count TIP', 
         'Total m/min OTIP', 'HSR m/min OTIP', 'Sprint m/min OTIP',
         'High Accel Count OTIP', 'High Decel Count OTIP'])
     if not metrics:
-        metrics =  ['Top Speed', 'Top Accel Time', 
+        metrics =  ['Top Speed', 'Accel Time', 
         'Total m/min TIP', 'HSR m/min TIP', 'Sprint m/min TIP', 
         'High Accel Count TIP', 'High Decel Count TIP', 
         'Total m/min OTIP', 'HSR m/min OTIP', 'Sprint m/min OTIP',
