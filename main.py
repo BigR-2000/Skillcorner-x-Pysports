@@ -20,7 +20,9 @@ st.set_page_config(layout="wide")
 
 st.markdown("""
 
-<style> .stApp { background-color: #0e1117 !important; color: #fafafa !important; } [data-testid="stSidebar"] { background-color: #262730 !important; } p, h1, h2, h3, h4, h5, h6, label { color: #fafafa !important; } </style>
+<style> /* */ html, body, [data-testid="stAppViewContainer"], [data-testid="stHeader"], .stApp { background-color: #0e1117 !important; color: #fafafa !important; }
+
+</style>
 
 """, unsafe_allow_html=True)
 
