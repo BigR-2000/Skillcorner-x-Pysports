@@ -18,13 +18,6 @@ from src.app_styling import add_custom_css
 
 st.set_page_config(layout="wide")
 
-st.markdown("""
-
-<style> /* */ html, body, [data-testid="stAppViewContainer"], [data-testid="stHeader"], .stApp { background-color: #0e1117 !important; color: #fafafa !important; }
-
-</style>
-
-""", unsafe_allow_html=True)
 
 URLS = {
     #"dynamic_events": "https://raw.githubusercontent.com/SkillCorner/opendata/master/data/matches/1886347/1886347_dynamic_events.csv",
